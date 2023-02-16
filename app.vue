@@ -9,20 +9,24 @@
 
 <script setup>
 	const router = useRouter();
-	let isCodeRequested = useCookie('isCodeRequested', { maxAge: 60 });
-	let isCodeVerified = useCookie('isCodeVerified', { maxAge: 60 });
+	let isCodeRequested = useCookie('isCodeRequested', { maxAge: 600 });
+	let isCodeVerified = useCookie('isCodeVerified', { maxAge: 3600 });
 
-	onMounted(async () => {
-		// Initiate cookies
-		isCodeRequested.value = false;
-		isCodeVerified.value = false;
-
-		// if (isCodeVerified.value) {
-		// 	router.push({ path: '/upload' });
-		// } else {
-		// 	router.push({ path: '/' });
-		// }
+	onBeforeMount(() => {
+		if (!isCodeRequested.value) {
+			isCodeRequested.value = false;
+		}
+		if (!isCodeVerified.value) {
+			isCodeVerified.value = false;
+		}
+		if (isCodeVerified.value) {
+			router.push({ path: '/upload' });
+		} else {
+			router.push({ path: '/' });
+		}
 	});
+
+	onMounted(async () => {});
 
 	watch(isCodeVerified, () => {
 		console.log('Is Code Verified: ', isCodeVerified); // Doesn't watch or print anything!

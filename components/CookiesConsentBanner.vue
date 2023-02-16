@@ -22,20 +22,16 @@
 </template>
 
 <script setup>
-	let cookiesConsent = ref(true);
+	let cookiesConsent = useCookie('cookiesConsent', { maxAge: 120 });
 
 	onBeforeMount(() => {
-		if (localStorage.getItem('cookiesConsent')) {
-			cookiesConsent.value = JSON.parse(localStorage.getItem('cookiesConsent'));
-		} else {
+		if (!cookiesConsent.value) {
 			cookiesConsent.value = false;
-			localStorage.setItem('cookiesConsent', false);
 		}
 	});
 
 	const acceptCookies = () => {
 		cookiesConsent.value = true;
-		localStorage.setItem('cookiesConsent', true);
 	};
 </script>
 
