@@ -24,7 +24,7 @@
 <script setup>
 	let cookiesConsent = ref(true);
 
-	onMounted(() => {
+	onBeforeMount(() => {
 		if (localStorage.getItem('cookiesConsent')) {
 			cookiesConsent.value = JSON.parse(localStorage.getItem('cookiesConsent'));
 		} else {
