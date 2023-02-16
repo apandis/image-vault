@@ -1,6 +1,6 @@
 <template>
 	<form
-		v-if="!codeRequested"
+		v-if="!isCodeRequested"
 		@submit.prevent="onRequestCode"
 		class="grid grid-cols-1 gap-4 p-4 w-full md:max-w-sm md:mx-auto content-start"
 	>
@@ -24,7 +24,7 @@
 		</div>
 	</form>
 	<form
-		v-if="codeRequested"
+		v-if="isCodeRequested"
 		@submit.prevent="onVerifyCode"
 		class="grid grid-cols-1 gap-4 p-4 w-full md:max-w-sm md:mx-auto"
 	>
@@ -70,8 +70,8 @@
 <script setup>
 	const router = useRouter();
 	let queryCookie = useCookie('query', { maxAge: 60 });
-	let codeRequested = useCookie('code-requested', { maxAge: 600 }) || false;
-	let isVerified = useCookie('isUserVerified', { maxAge: 3600 }) || false;
+	let isCodeRequested = useCookie('isCodeRequested', { maxAge: 600 });
+	let isCodeVerified = useCookie('isCodeVerified', { maxAge: 3600 });
 	let channel = ref('sms');
 	let email = ref('');
 	let tel = ref('');
@@ -90,10 +90,8 @@
 			} = await useFetch(`/api/twilio/sendcode?to=${email.value}&channel=${channel.value}`);
 			query = { channel: channel.value, email: email.value };
 			verification = res;
-			localStorage.setItem('query', JSON.stringify(query));
-			localStorage.setItem('code-requested', true);
 			queryCookie.value = query;
-			codeRequested.value = true;
+			isCodeRequested.value = true;
 		} else {
 			const {
 				data: res,
@@ -103,10 +101,8 @@
 			} = await useFetch(`/api/twilio/sendcode?to=${tel.value}&channel=${channel.value}`);
 			query = { channel: channel.value, tel: tel.value };
 			verification = res;
-			localStorage.setItem('query', JSON.stringify(query));
-			localStorage.setItem('code-requested', true);
 			queryCookie.value = query;
-			codeRequested.value = true;
+			isCodeRequested.value = true;
 		}
 	};
 	const onVerifyCode = async () => {
@@ -118,8 +114,7 @@
 				refresh,
 			} = await useFetch(`/api/twilio/verifycode?to=${email.value}&code=${code.value}`);
 			verification = res;
-			localStorage.setItem('is-verified', true);
-			isVerified.value = true;
+			isCodeVerified.value = true;
 			router.push({ path: '/upload' });
 		} else {
 			const {
@@ -129,8 +124,7 @@
 				refresh,
 			} = await useFetch(`/api/twilio/verifycode?to=${tel.value}&code=${code.value}`);
 			verification = res;
-			localStorage.setItem('is-verified', true);
-			isVerified.value = true;
+			isCodeVerified.value = true;
 			router.push({ path: '/upload' });
 		}
 	};
