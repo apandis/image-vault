@@ -1,37 +1,81 @@
 <template>
-	<main>
-		<div class="mx-auto max-w-7xl py-6 p-6">
-			<div class="flex items-center justify-center w-full">
-				<label
-					for="dropzone-file"
-					class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-				>
-					<div class="flex flex-col items-center justify-center pt-5 pb-6">
+	<div>
+		<div class="mx-auto max-w-7xl">
+			<div class="p-4">
+				<div class="flex max-w-lg justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+					<div class="space-y-1 text-center">
 						<svg
-							aria-hidden="true"
-							class="w-10 h-10 mb-3 text-gray-400"
-							fill="none"
+							class="mx-auto h-12 w-12 text-gray-400"
 							stroke="currentColor"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 48 48"
+							aria-hidden="true"
 						>
 							<path
+								d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+								stroke-width="2"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								stroke-width="2"
-								d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-							></path>
+							/>
 						</svg>
-						<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-							<span class="font-semibold">Click to upload</span> or drag and drop
-						</p>
-						<p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+						<div class="flex text-sm text-gray-600">
+							<label
+								for="file-upload"
+								class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
+							>
+								<span>Upload a file</span>
+								<input id="file-upload" name="file-upload" type="file" class="sr-only" />
+							</label>
+							<p class="pl-1">or drag and drop</p>
+						</div>
+						<p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
 					</div>
-					<input id="dropzone-file" type="file" class="hidden" />
-				</label>
+				</div>
 			</div>
 		</div>
-	</main>
+		<div class="container mx-auto p-3">
+			<section class="p-6 border border-gray-400">
+				<h1>ImageVault</h1>
+				<input
+					type="file"
+					class="py-2 px-4 border border-gray-400 rounded-lg"
+					@change="parseDICOMFile"
+					webkitdirectory
+					directory
+					multiple
+				/>
+				<button class="py-2 px-4 ml-4 bg-blue-500 text-white rounded-lg" @click="sendDICOMData">Send DICOM Data</button>
+				<p>Patient Information:</p>
+				<table v-if="patient.name">
+					<tr>
+						<th>Data Element</th>
+						<th>Value</th>
+						<th>Anonymized</th>
+					</tr>
+					<tr>
+						<td>Patient Name</td>
+						<td>{{ patient.name }}</td>
+						<td>{{ anonymize(patient.name) }}</td>
+					</tr>
+					<tr>
+						<td>Patient ID</td>
+						<td>{{ patient.id }}</td>
+						<td>{{ anonymize(patient.id) }}</td>
+					</tr>
+					<tr>
+						<td>Birth Date</td>
+						<td>{{ patient.birthDate }}</td>
+						<td>{{ anonymize(patient.birthDate) }}</td>
+					</tr>
+					<tr>
+						<td>Gender</td>
+						<td>{{ patient.gender }}</td>
+						<td>{{ anonymize(patient.gender) }}</td>
+					</tr>
+				</table>
+			</section>
+		</div>
+	</div>
 </template>
 
 //

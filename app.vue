@@ -3,6 +3,7 @@
 		<NavigationBar />
 		<NuxtPage />
 		<Footer />
+		<CookiesConsentBanner />
 	</div>
 </template>
 
@@ -16,15 +17,15 @@
 		isCodeRequested.value = false;
 		isCodeVerified.value = false;
 
-		if (isCodeVerified.value) {
-			router.push({ path: '/upload' });
-		} else {
-			router.push({ path: '/' });
-		}
+		// if (isCodeVerified.value) {
+		// 	router.push({ path: '/upload' });
+		// } else {
+		// 	router.push({ path: '/' });
+		// }
 	});
 
-	watch(isCodeVerified.value, () => {
-		console.log('Is User Verified: ', isUserVerified); // Doesn't watch or print anything!
+	watch(isCodeVerified, () => {
+		console.log('Is Code Verified: ', isCodeVerified); // Doesn't watch or print anything!
 	});
 </script>
 
