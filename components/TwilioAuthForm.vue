@@ -17,7 +17,17 @@
 		</div>
 		<div v-if="channel === 'sms'" class="flex flex-col text-gray-700 mb-2">
 			<label for="tel" class="">Phone Number</label>
-			<input v-model="tel" type="tel" name="tel" id="tel" placeholder="xxxxxxxxxx" required max="10" min="10" />
+			<input
+				v-model="tel"
+				@input="lookupNumber(tel)"
+				type="tel"
+				name="tel"
+				id="tel"
+				placeholder="xxxxxxxxxx"
+				required
+				max="10"
+				min="10"
+			/>
 		</div>
 		<div class="flex flex-col">
 			<button type="submit" class="bg-gray-900 hover:bg-gray-700 text-white p-3">Request Code</button>
@@ -78,6 +88,7 @@
 	let code = ref('');
 	let query = reactive({});
 	let verification = reactive({});
+	let lookup = reactive({});
 	let acceptTerms = ref();
 
 	const onRequestCode = async () => {
@@ -126,6 +137,13 @@
 			verification = res;
 			isCodeVerified.value = true;
 			router.push({ path: '/upload' });
+		}
+	};
+	const lookupNumber = async (tel) => {
+		if (tel.length >= 10) {
+			const { data: res, pending, error, refresh } = await useFetch(`/api/twilio/lookup?to=${tel}`);
+			lookup = res;
+			console.log(res);
 		}
 	};
 </script>

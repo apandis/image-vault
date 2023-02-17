@@ -19,17 +19,12 @@
 		if (!isCodeVerified.value) {
 			isCodeVerified.value = false;
 		}
-		if (isCodeVerified.value) {
-			router.push({ path: '/upload' });
-		} else {
-			router.push({ path: '/' });
-		}
 	});
 
 	onMounted(async () => {});
 
 	watch(isCodeVerified, () => {
-		console.log('Is Code Verified: ', isCodeVerified); // Doesn't watch or print anything!
+		console.log('Is Code Verified: ', isCodeVerified.value); // Doesn't watch or print anything!
 	});
 </script>
 

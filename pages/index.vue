@@ -11,7 +11,13 @@
 </template>
 
 <script setup>
-	let authMethod = ref();
+	definePageMeta({
+		middleware: ['upload'],
+	});
+
+	onBeforeMount(() => {});
+
+	onMounted(async () => {});
 </script>
 
 <style lang="scss" scoped></style>
